@@ -1,0 +1,36 @@
+
+dhclient em0
+
+export DISTRIBUTIONS="kernel.txz base.txz"
+export ZFSBOOT_VDEV_TYPE="stripe"
+export ZFSBOOT_DISKS="ada0"
+export nonInteractive="YES"
+
+#!/bin/sh
+
+# Install packages
+export ASSUME_ALWAYS_YES=YES 
+pkg update -f
+pkg install -y  amazon-ssm-agent \
+                ebsnvme-id \
+                ec2-scripts \
+                firstboot-freebsd-update \
+                firstboot-pkgs \
+                isc-dhcp44-client
+
+# Configure rc.conf
+sysrc ifconfig_DEFAULT="SYNCDHCP accept_rtadv"
+sysrc sshd_enable="YES"
+sysrc growfs_enable="YES"
+sysrc ipv6_activate_all_interfaces="YES"
+sysrc rtsold_enable="YES"
+sysrc rtsold_flags="-M /usr/local/libexec/rtsold-M -a"
+
+sysrc ec2_configinit_enable="YES"
+sysrc ec2_fetchkey_enable="YES"
+sysrc ec2_loghostkey_enable="YES"
+sysrc firstboot_freebsd_update_enable="YES"
+sysrc firstboot_pkgs_enable="YES"
+sysrc ntpd_enable="YES"
+sysrc dev_aws_disk_enable="YES"
+sysrc ec2_ephemeral_swap_enable="YES"
