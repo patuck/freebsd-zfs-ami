@@ -23,13 +23,7 @@ sysrc ifconfig_DEFAULT="SYNCDHCP accept_rtadv"
 sysrc sshd_enable="YES"
 sysrc growfs_enable="YES"
 sysrc ipv6_activate_all_interfaces="YES"
-sysrc rtsold_enable="YES"
-sysrc rtsold_flags="-M /usr/local/libexec/rtsold-M -a"
 sysrc firstboot_pkgs_list="devel/py-awscli"
-sysrc ipv6_activate_all_interfaces="YES"
-sysrc rtsold_enable="YES"
-sysrc rtsold_flags="-M /usr/local/libexec/rtsold-M -a"
-
 sysrc ec2_configinit_enable="YES"
 sysrc ec2_fetchkey_enable="YES"
 sysrc ec2_loghostkey_enable="YES"
@@ -43,12 +37,5 @@ sysrc ec2_ephemeral_swap_enable="YES"
 # Configure sysctls
 echo 'net.inet6.ip6.dad_count=0' >> /etc/sysctl.conf
 
-# Provide a script which rtsold can use to launch DHCPv6
-mkdir -p /usr/local/libexec
-cat > /usr/local/libexec/rtsold-M <<'EOF'
-#!/bin/sh
-/usr/local/sbin/dhclient -6 -nw -N -cf /dev/null $1
-EOF
-chmod 755 ${DESTDIR}/usr/local/libexec/rtsold-M
-
+# Touch firstboot file
 touch /firstboot
